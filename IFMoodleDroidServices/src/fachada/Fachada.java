@@ -232,22 +232,6 @@ public class Fachada {
 		}
 		return retorno;
 	}
-	
-	
-	public  ArrayList<MensagemTopico> retornaMensagensTopico(String login, String senha,
-			String flagEncriptacao, String topicoId) {
-		Usuario usuarioLogado = retornaUsuario(login, senha, flagEncriptacao);
-		ArrayList<MensagemTopico> retorno=null;
-		if(usuarioLogado!= null){
-			try {
-				retorno = controladorForum.retornaMensagensTopico(Long.parseLong(topicoId));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return retorno;
-	}
-	
 
 	public Usuario acrescentarUmContato(String login, String senha,
 			String flagEncriptacao, String contatoId) {
@@ -319,6 +303,22 @@ public class Fachada {
 		if(usuarioLogado!= null){
 			try {
 				retorno = controladorForum.retornaForunsSemanas(Long.parseLong(semanaId));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return retorno;
+	}
+
+
+	public MensagemTopico responderForumPost(String login, String senha, String flagEncriptacao, String userId,
+			String parent, String discussion, String subject, String message) {
+		Usuario usuarioLogado = retornaUsuario(login, senha, flagEncriptacao);
+		MensagemTopico retorno=null;
+		if(usuarioLogado!= null){
+			try {
+				retorno = controladorForum.responderForumPost(login, senha,
+						flagEncriptacao, userId, parent, discussion, subject, message);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

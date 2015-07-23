@@ -1,3 +1,5 @@
+
+
 <%-- 
     Document   : index
     Created on : 29/08/2012, 03:34:16
@@ -216,6 +218,22 @@
 	</form>
 	<hr>
 	
+		<p>Responder Post Forum:</p>
+	<form method="post"
+		action="http://localhost:8080/IFMoodleDroidServices/rest/listener/responderForumPost">
+		<p>login:</p><input type="text" name="login" /><br /> 
+		<p>Senha:</p><input type="text" name="senha" /><br /> 
+		<p>flag de decriptação(0 - off, 1 - on):</p><input type="text" name="flagDecriptacao" title="aaaa" />
+		<br /> 
+		<p>User ID:</p><input type="text" name="userId" /><br />
+		<p>Parent:</p><input type="text" name="parent" /><br />
+		<p>Discussion:</p><input type="text" name="discussion" /><br />
+		<p>Subject:</p><input type="text" name="subject" /><br />
+		<p>Message:</p><input type="text" name="message" /><br />
+		<input type="submit" value="Enviar" />
+	</form>
+	<hr>
+
 	
 	<br />
 	<br />

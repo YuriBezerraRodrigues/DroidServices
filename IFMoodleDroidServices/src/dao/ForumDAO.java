@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.mysql.jdbc.Statement;
+
 import model.Forum;
+import model.Mensagem;
 import model.MensagemTopico;
 import model.Topicos;
 import factory.ConnectionFactory;
@@ -119,60 +122,6 @@ public class ForumDAO {
 		return listTopicos;
 	}
 	
-	
-	public ArrayList<MensagemTopico> retornaMensagensTopico(long idTopico) throws Exception {
-
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet resultSet = null;
-		MensagemTopico mensagemTemp = null;
-		ArrayList<MensagemTopico> listMensagens = new ArrayList<MensagemTopico>();
-		boolean resultVazio = true;
-		
-		try{
-			String query ="SELECT id ,discussion, userid, message from mdl_forum_posts WHERE discussion = ? ";
-			connection = ConnectionFactory.getInstance().getConnection();
-
-			preparedStatement = connection.prepareStatement(query);
-			preparedStatement.setLong(1, idTopico);
-			
-			resultSet = preparedStatement.executeQuery();
-			
-			while (resultSet.next()) {
-				resultVazio = false;
-				mensagemTemp = new MensagemTopico();
-				mensagemTemp.setIdMensagem(resultSet.getInt("id"));
-				mensagemTemp.setIdTopico(resultSet.getInt("discussion"));
-				mensagemTemp.setIdDeQuemPostou(resultSet.getInt("userid"));
-				mensagemTemp.setMensagem(resultSet.getString("message"));
-				
-				listMensagens.add(mensagemTemp);
-			}
-			
-		}catch (SQLException ex) {
-			Logger.getLogger(PostagemDAO.class.getName()).log(Level.SEVERE,
-					null, ex);
-		} finally {
-			try {
-				if (resultSet != null) {
-					resultSet.close();
-				}
-				if (preparedStatement != null) {
-					preparedStatement.close();
-				}
-			} catch (SQLException ex) {
-				Logger.getLogger(PostagemDAO.class.getName()).log(Level.SEVERE,
-						null, ex);
-			}
-		}
-		
-		if(resultVazio){
-			return null;
-		}
-		
-		return listMensagens;
-	}
-
 	public ArrayList<Forum> retornaForunsSemanas(long semanaId) throws Exception{
 
 		Connection connection = null;
@@ -224,6 +173,51 @@ public class ForumDAO {
 		}
 		
 		return listForunsSemanas;
+
+	}
+
+	public MensagemTopico responderForumPost(String login, String senha, String flagEncriptacao,
+			String userId, String parent, String discussion, String subject, String message) throws Exception {
+		Connection connection = null;
+		int retorno_statement = 0;
+		PreparedStatement stmt = null;
+
+		MensagemTopico temp = null;
+		try {
+			String query = "INSERT INTO mdl_forum_posts(discussion, parent, userid, created, modified, subject, message) VALUES (?,?,?,now(),now(),?,?)";
+			connection = ConnectionFactory.getInstance().getConnection();
+
+			stmt = connection.prepareStatement(query);
+
+			stmt.setLong(1, Long.parseLong(discussion));
+			stmt.setLong(2, Long.parseLong(parent));
+			stmt.setLong(3, Long.parseLong(userId));
+			stmt.setString(4, subject);
+			stmt.setString(5, message);
+			
+			retorno_statement = stmt.executeUpdate();
+
+			if (retorno_statement != 0) {// se der tudo certo 
+				temp = new MensagemTopico(Long.parseLong(discussion), Long.parseLong(parent), Long.parseLong(userId), subject, message);
+			}
+
+		} catch (SQLException ex) {
+			Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE,
+					null, ex);
+		} finally {
+			try {
+
+				if (retorno_statement != 0) {
+					stmt.close();
+				}
+
+			} catch (SQLException ex) {
+				Logger.getLogger(UsuarioDAO.class.getName()).log(Level.SEVERE,
+						null, ex);
+			}
+
+		}
+		return temp;
 
 	}
 

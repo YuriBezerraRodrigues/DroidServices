@@ -23,15 +23,15 @@ public class ControladorForum {
 				.retornaTopicosForum(idForum);
 	}
 
-	public ArrayList<MensagemTopico> retornaMensagensTopico(Long idTopico)
-			throws Exception {
-		return ForumDAOFactory.getInstance().getDAO()
-				.retornaMensagensTopico(idTopico);
-	}
-
 	public ArrayList<Forum> retornaForunsSemanas(long semanaId)
 			throws Exception {
 		return ForumDAOFactory.getInstance().getDAO()
 				.retornaForunsSemanas(semanaId);
+	}
+
+	public MensagemTopico responderForumPost(String login, String senha, String flagEncriptacao,
+			String userId, String parent, String discussion, String subject, String message) throws Exception {
+		return ForumDAOFactory.getInstance().getDAO().responderForumPost(login, senha,
+				flagEncriptacao, userId, parent, discussion, subject, message);
 	}
 }

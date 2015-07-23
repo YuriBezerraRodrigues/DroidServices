@@ -87,22 +87,6 @@ public class ListenerResourcePost {
 
 	}
 
-	// retorna ensagens pelo topico
-	@Path("/retornaMensagensTopico")
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public ArrayList<MensagemTopico> retornaMensagensTopico(
-			@FormParam("login") String login, @FormParam("senha") String senha,
-			@FormParam("flagDecriptacao") String flagEncriptacao,
-			@FormParam("topicoId") String topicoId,
-			@Context HttpServletResponse servletResponse) throws IOException {
-
-		return Fachada.getInstance().retornaMensagensTopico(login, senha,
-				flagEncriptacao, topicoId);
-
-	}
-
 	@Path("/verificarCursos")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -308,11 +292,31 @@ public class ListenerResourcePost {
 			@FormParam("flagDecriptacao") String flagEncriptacao,
 			@FormParam("semanaId") String semanaId,
 			@Context HttpServletResponse servletResponse) throws IOException {
-
+		
 		return Fachada.getInstance().retornaForunsSemanas(login, senha,
 				flagEncriptacao, semanaId);
-
+		
 	}
+	
+	@Path("/responderForumPost")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	public MensagemTopico responderForumPost(
+			@FormParam("login") String login, @FormParam("senha") String senha,
+			@FormParam("flagDecriptacao") String flagEncriptacao,
+			@FormParam("userId") String userId,
+			@FormParam("parent") String parent,
+			@FormParam("discussion") String discussion,
+			@FormParam("subject") String subject,
+			@FormParam("message") String message,
+			@Context HttpServletResponse servletResponse) throws IOException {
+		
+		return Fachada.getInstance().responderForumPost(login, senha,
+				flagEncriptacao, userId, parent, discussion, subject, message);
+		
+	}
+
 
 	
 	@Path("/hello")
